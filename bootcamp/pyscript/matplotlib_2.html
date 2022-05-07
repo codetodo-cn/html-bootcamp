@@ -5,7 +5,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width,initial-scale=1" />
 
-    <title>PyScript Case_01</title>
+    <title>PyScript Case_02</title>
 
     <link rel="icon" type="image/png" href="favicon.png" />
     <!-- <link rel="stylesheet" href="../build/pyscript.css" /> -->
@@ -14,15 +14,27 @@
     <!-- <script defer src="../build/pyscript.js"></script> -->
     <script defer src="https://pyscript.net/alpha/pyscript.js"></script>
 
+    <py-env>
+- numpy
+- matplotlib
+- paths:
+  - ./py/data.py
+    </py-env>
 </head>
 
 <body>
-    Hello world! <br>
-    This is the current date and time, as computed by Python:
-    <py-script>
-from datetime import datetime
-now = datetime.now()
-now.strftime("%m/%d/%Y, %H:%M:%S")
+    <h1>Let's plot random numbers 2:</h1>
+    <div id="plot"></div>
+    <py-script output="plot">
+import matplotlib.pyplot as plt
+from data import make_x_and_y
+
+x, y = make_x_and_y(n=500)
+
+fig, ax = plt.subplots()
+ax.scatter(x, y)
+fig
+<!-- pyscript.write('plot', fig) -->
     </py-script>
 </body>
 
