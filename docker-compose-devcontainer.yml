@@ -1,0 +1,28 @@
+version: '3.5'
+
+services:
+  html-bootcamp:
+    container_name: html-bootcamp
+    image: liyaodev/html-bootcamp-env:v1.0.0
+    # 本地构建
+    build:
+      context: .
+      dockerfile: build/docker/build_env/Dockerfile
+    ports:
+      - 8888:8888
+    volumes:
+      - .:/www/server:delegated
+      - ${HTML_BOOTCAMP_ROOT_DIR:-.}/volumes/vscode-extensions:/www/.vscode-server:delegated
+
+  nginx:
+    container_name: html-nginx
+    image: nginx:1.21.6
+    ports:
+      - 8000:80
+    volumes:
+      - ./nginx/conf.d:/etc/nginx/conf.d:delegated
+      - ./nginx/html:/usr/share/nginx/html:delegated
+
+networks:
+  default:
+    name: html_bootcamp_dev
