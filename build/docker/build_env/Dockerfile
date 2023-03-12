@@ -1,12 +1,23 @@
-FROM liyaodev/base-cpu-u18-py3.8:v1.0.0
+FROM node:16.19.0-alpine3.17
 LABEL maintainer=liyaodev
 
-RUN echo 'root:root' | chpasswd
+# 设置字符字符集
+ENV LANG=C.UTF-8
 
-# 构建Tini的多服务容器
-RUN wget -O /tini https://github.com/krallin/tini/releases/download/v0.19.0/tini && \
-    chmod +x /tini
-ENTRYPOINT ["/tini", "--"]
+# Set System Env
+RUN apk update \
+    && apk add vim \
+    && apk add bash \
+    && apk add --no-cache wget \
+    && apk add --no-cache tini \
+    && apk add tzdata && cp /usr/share/zoneinfo/Asia/Shanghai /etc/localtime && echo 'Asia/Shanghai' >/etc/timezone
+
+RUN echo 'root:root' | chpasswd
+ENTRYPOINT ["tini", "--"]
+
+# Set Dev Env
+RUN npm config set registry https://registry.npm.taobao.org \
+    && npm install -g @vue/cli@4.5.16
 
 WORKDIR /www/server
 
